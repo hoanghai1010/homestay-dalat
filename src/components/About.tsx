@@ -56,16 +56,6 @@ const About = () => {
       className="py-20 bg-secondary/30"
     >
       <div className="container mx-auto px-4">
-        <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <h2 className="font-heading text-4xl md:text-5xl font-bold text-primary mb-6">
-            Serenity Valley xin chào!
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            Nestled in the heart of majestic mountains, Serenity Valley Homestay offers a perfect escape 
-            from the bustling city life. Our cozy retreat combines traditional hospitality with modern comfort, 
-            creating an unforgettable experience surrounded by nature's tranquility.
-          </p>
-        </div>
       </div>
 
       <div className="text-center mb-16">
