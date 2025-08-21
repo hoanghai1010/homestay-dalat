@@ -1,16 +1,29 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronDown } from 'lucide-react';
-import heroBackground from '@/assets/lengkeng.jpeg';
+import heroBackground1 from '@/assets/lengkeng.jpeg';
+import heroBackground2 from '@/assets/view-1.jpg';
+import heroBackground3 from '@/assets/view-2.jpg';
 
 const Hero = () => {
   const [scrollY, setScrollY] = useState(0);
+  const [currentBgIndex, setCurrentBgIndex] = useState(0);
+  
+  const backgroundImages = [heroBackground1, heroBackground2, heroBackground3];
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentBgIndex((prevIndex) => (prevIndex + 1) % backgroundImages.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [backgroundImages.length]);
 
   const scrollToNext = () => {
     const aboutSection = document.getElementById('about');
@@ -21,17 +34,22 @@ const Hero = () => {
 
   return (
     <section id="home" className="relative h-screen flex items-center justify-center overflow-hidden">
-      {/* Parallax Background */}
-      <div 
-        className="absolute inset-0 parallax"
-        style={{
-          backgroundImage: `url(${heroBackground})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundAttachment: 'fixed',
-          transform: `translateY(${scrollY * 0.5}px)`,
-        }}
-      />
+      {/* Background Carousel */}
+      {backgroundImages.map((bg, index) => (
+        <div
+          key={index}
+          className={`absolute inset-0 parallax transition-opacity duration-1000 ease-in-out ${
+            index === currentBgIndex ? 'opacity-100' : 'opacity-0'
+          }`}
+          style={{
+            backgroundImage: `url(${bg})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundAttachment: 'fixed',
+            transform: `translateY(${scrollY * 0.5}px)`,
+          }}
+        />
+      ))}
       
       {/* Overlay */}
       <div className="absolute inset-0 bg-gradient-hero" />
@@ -70,6 +88,21 @@ const Hero = () => {
             </Button>
           </div>
         </div>
+      </div>
+
+      {/* Background Indicators */}
+      <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 flex gap-2">
+        {backgroundImages.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentBgIndex(index)}
+            className={`w-3 h-3 rounded-full transition-all duration-300 ${
+              index === currentBgIndex 
+                ? 'bg-white scale-125' 
+                : 'bg-white/40 hover:bg-white/60'
+            }`}
+          />
+        ))}
       </div>
 
       {/* Scroll Indicator */}
