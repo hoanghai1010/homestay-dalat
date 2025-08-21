@@ -13,6 +13,7 @@
     "@radix-ui/react-slot": "^1.2.3",
     "@vitejs/plugin-react-swc": "^4.0.1",
     "class-variance-authority": "^0.7.1",
+    "lucide-react": "^0.540.0",
     "path": "^0.12.7",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
