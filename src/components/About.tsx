@@ -53,7 +53,7 @@ const About = () => {
     <section 
       ref={sectionRef}
       id="about" 
-      className="py-20 bg-secondary/30"
+      className="py-20 bg-background"
     >
       <div className="container mx-auto px-4">
       </div>
