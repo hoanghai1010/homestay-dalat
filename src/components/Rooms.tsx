@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Users, Bed, Wifi, Coffee, Mountain, Bath } from 'lucide-react';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import { Users, Bed, ChevronRight } from 'lucide-react';
+import Autoplay from "embla-carousel-autoplay";
 import deluxeRoom from '@/assets/deluxe.jpg';
 import standardRoom from '@/assets/standark.jpg';
 import suiteRoom from '@/assets/suite.jpg';
@@ -37,7 +38,8 @@ const Rooms = () => {
       maxGuests: 2,
       beds: "1 giường đôi King",
       amenities: ["WiFi miễn phí", "Điều hòa", "View núi", "Ban công riêng", "Minibar", "Phòng tắm riêng"],
-      description: "Phòng cao cấp với tầm nhìn panoramic ra núi rừng hùng vĩ. Không gian rộng rãi và sang trọng với thiết kế hiện đại pha trộn phong cách truyền thống.",
+      description: "Phòng cao cấp với tầm nhìn panoramic ra núi rừng hùng vĩ.",
+      shortDescription: "Không gian rộng rãi và sang trọng với thiết kế hiện đại.",
       features: ["Premium", "Best View"]
     },
     {
@@ -48,7 +50,8 @@ const Rooms = () => {
       maxGuests: 4,
       beds: "2 giường đôi",
       amenities: ["WiFi miễn phí", "Điều hòa", "View vườn", "Phòng tắm riêng", "Tủ lạnh", "Khu vực nghỉ ngơi"],
-      description: "Phòng tiêu chuẩn ấm cúng phù hợp cho gia đình hoặc nhóm bạn. Thiết kế tối giản nhưng đầy đủ tiện nghi cần thiết.",
+      description: "Phòng tiêu chuẩn ấm cúng phù hợp cho gia đình hoặc nhóm bạn.",
+      shortDescription: "Thiết kế tối giản nhưng đầy đủ tiện nghi cần thiết.",
       features: ["Family", "Garden View"]
     },
     {
@@ -59,26 +62,19 @@ const Rooms = () => {
       maxGuests: 2,
       beds: "1 giường đôi King + Khu vực nghỉ",
       amenities: ["WiFi miễn phí", "Điều hòa", "Jacuzzi", "View núi 360°", "Bếp nhỏ", "Phòng khách riêng", "Ban công lớn"],
-      description: "Căn suite cao cấp nhất với không gian rộng lớn và sang trọng. Tầm nhìn 360 độ ra núi rừng cùng các tiện nghi đẳng cấp resort.",
+      description: "Căn suite cao cấp nhất với không gian rộng lớn và sang trọng.",
+      shortDescription: "Tầm nhìn 360 độ ra núi rừng cùng các tiện nghi đẳng cấp resort.",
       features: ["Luxury", "360° View", "Jacuzzi"]
     }
   ];
-
-  const getAmenityIcon = (amenity: string) => {
-    if (amenity.includes('WiFi')) return <Wifi className="w-4 h-4" />;
-    if (amenity.includes('View') || amenity.includes('núi')) return <Mountain className="w-4 h-4" />;
-    if (amenity.includes('Minibar') || amenity.includes('Tủ lạnh')) return <Coffee className="w-4 h-4" />;
-    if (amenity.includes('tắm') || amenity.includes('Jacuzzi')) return <Bath className="w-4 h-4" />;
-    return null;
-  };
 
   return (
     <section 
       ref={sectionRef}
       id="rooms" 
-      className="py-20 bg-background"
+      className="py-16 bg-background"
     >
-      <div className="container mx-auto px-4">
+      <div className="w-full">
         <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <h2 className="font-heading text-4xl md:text-5xl font-bold text-primary mb-6">
             Các Phòng Nghỉ
@@ -89,76 +85,74 @@ const Rooms = () => {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-8">
-          {rooms.map((room, index) => (
-            <Card 
-              key={room.id}
-              className={`group overflow-hidden transform transition-all duration-700 hover:shadow-strong hover:-translate-y-2 ${
-                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-              }`}
-              style={{ transitionDelay: `${index * 200}ms` }}
-            >
-              <div className="relative overflow-hidden">
-                <img 
-                  src={room.image}
-                  alt={room.name}
-                  className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute top-4 left-4 flex flex-wrap gap-2">
-                  {room.features.map((feature) => (
-                    <Badge key={feature} variant="secondary" className="bg-gradient-primary text-primary-foreground shadow-medium">
-                      {feature}
-                    </Badge>
-                  ))}
-                </div>
-                <div className="absolute bottom-4 right-4 bg-black/70 backdrop-blur-sm text-white px-3 py-1 rounded-full">
-                  <span className="text-lg font-bold">{room.price}₫</span>
-                  <span className="text-sm opacity-80">/đêm</span>
-                </div>
-              </div>
-
-              <CardHeader className="pb-3">
-                <h3 className="font-heading text-2xl font-bold text-primary mb-2 group-hover:text-accent transition-colors duration-300">
-                  {room.name}
-                </h3>
-                <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                  <div className="flex items-center gap-1">
-                    <Users className="w-4 h-4" />
-                    <span>{room.maxGuests} khách</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Bed className="w-4 h-4" />
-                    <span>{room.beds}</span>
-                  </div>
-                </div>
-              </CardHeader>
-
-              <CardContent className="space-y-4">
-                <p className="text-muted-foreground leading-relaxed">
-                  {room.description}
-                </p>
-
-                <div className="space-y-2">
-                  <h4 className="font-semibold text-primary">Tiện nghi:</h4>
-                  <div className="grid grid-cols-2 gap-1">
-                    {room.amenities.map((amenity) => (
-                      <div key={amenity} className="flex items-center gap-2 text-sm text-muted-foreground">
-                        {getAmenityIcon(amenity)}
-                        <span>{amenity}</span>
+        <div className={`w-full transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <Carousel 
+            className="w-full" 
+            opts={{ loop: true, align: "center" }}
+            plugins={[
+              Autoplay({
+                delay: 4000,
+              }),
+            ]}
+          >
+            <CarouselContent className="relative">
+              {rooms.map((room) => (
+                <CarouselItem key={room.id} className="basis-full">
+                  <div className="group overflow-hidden transform transition-all duration-700">
+                    <div className="relative overflow-hidden h-96 md:h-[500px]">
+                      <img 
+                        src={room.image}
+                        alt={room.name}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                      <div className="absolute top-4 left-4 flex flex-wrap gap-2">
+                        {room.features.map((feature) => (
+                          <Badge key={feature} variant="secondary" className="bg-gradient-primary text-primary-foreground shadow-medium">
+                            {feature}
+                          </Badge>
+                        ))}
                       </div>
-                    ))}
+                      
+                      {/* Content overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end">
+                        <div className="text-white p-6 md:p-8 w-full">
+                          <h3 className="font-heading text-3xl md:text-5xl font-bold mb-4">
+                            {room.name}
+                          </h3>
+                          <div className="flex items-center gap-6 text-base mb-6">
+                            <div className="flex items-center gap-2">
+                              <Users className="w-5 h-5" />
+                              <span>{room.maxGuests} khách</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Bed className="w-5 h-5" />
+                              <span>{room.beds}</span>
+                            </div>
+                          </div>
+                          <p className="text-lg md:text-xl mb-4 leading-relaxed opacity-90">
+                            {room.description}
+                          </p>
+                          <p className="text-base md:text-lg mb-8 opacity-80">
+                            {room.shortDescription}
+                          </p>
+                          
+                          <Button 
+                            variant="secondary"
+                            className="bg-white/20 text-white border-white/30 hover:bg-white/30 backdrop-blur-sm"
+                          >
+                            Xem thêm
+                            <ChevronRight className="w-4 h-4 ml-2" />
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
-
-                <Button 
-                  className="w-full bg-gradient-primary hover:opacity-90 transition-all duration-300 transform hover:scale-105 shadow-medium"
-                  onClick={() => document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' })}
-                >
-                  Đặt phòng ngay
-                </Button>
-              </CardContent>
-            </Card>
-          ))}
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className="left-4 bg-white/20 border-white/30 text-white hover:bg-white/30 backdrop-blur-sm" />
+            <CarouselNext className="right-4 bg-white/20 border-white/30 text-white hover:bg-white/30 backdrop-blur-sm" />
+          </Carousel>
         </div>
       </div>
     </section>
