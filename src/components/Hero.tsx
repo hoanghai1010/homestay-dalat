@@ -51,9 +51,6 @@ const Hero = () => {
         />
       ))}
       
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-gradient-hero" />
-      
       {/* Content */}
       <div className="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
         <div className="fade-in-up">
